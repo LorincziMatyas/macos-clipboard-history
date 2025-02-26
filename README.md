@@ -18,16 +18,23 @@ When you start the script, it listens for clipboard activity. Every time you cop
 
 If Git is not already installed on your system, follow the instructions below. Otherwise, you can skip this step.
 
-- Install Homebrew with this command or visit their website for further information (<https://brew.sh>)
+- Install Homebrew package manager with this command or visit their website for further information (<https://brew.sh>)
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+```bash
+brew --version
 ```
 
 - Install Git with Homebrew, and check the version
 
 ```bash
 brew install git
+```
+
+```bash
 git version
 ```
 
@@ -40,14 +47,6 @@ git clone https://github.com/LorincziMatyas12/macbook-clipboard-history.git
 ```
 
 ### 3. Using the program (script)
-
-- Make sure that python3 is installed on your laptop. If not follow the instructions on the official site: <https://www.python.org/downloads/macos/>
-- You can also install python3 with Homebrew. Check the version with the following command
-
-```bash
-brew install python
-python --version
-```
 
 - Run the following command to grant execute permissions to your user. You only have to do this once. (Navigate to the project folder with **cd** command, then you don't have to include the **/path/to/** in the following commands)
 
