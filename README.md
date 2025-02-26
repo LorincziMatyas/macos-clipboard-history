@@ -108,3 +108,40 @@ nohup /path/to/macos-clipboard-history/clipboard_history.sh --start &
 - Grant **"Full Disk Access"** for Terminal and Automator in your system settings
   - Open **System Settings** and navigate to **Privacy & Security > Full Disk Access**
   - Click on the **"+"** button and select Automator and Terminal
+
+## Another version of the code
+
+- This version of the code is written in apple script.
+- Does the same thing but it is less bash script and more apple script.
+
+### Using the second version of the code
+
+- Add executable access to **"clipboard_history.appleascript"** with command:
+
+```bash
+chmod u+x clipboard_history.appleascript
+```
+
+- Run the script with:
+
+```bash
+osascript clipboard_history.applescript start
+```
+
+- Show clipboard:
+
+```bash
+osascript clipboard_history.applescript show
+```
+
+- Clear clipboard's content:
+
+```bash
+osascript clipboard_history.applescript clear
+```
+
+- Stop clipboard:
+
+```bash
+osascript clipboard_history.applescript stop
+```
