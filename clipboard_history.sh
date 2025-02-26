@@ -18,7 +18,7 @@
 PID_FILE="$HOME/.clipboard_history/.listener_pid"
 
 # Define the path to the history folder
-HISTORY_FOLDER="$HOME/.clipboard_history/.history_files"
+CLIPBOARD_HISTORY_FOLDER="$HOME/.clipboard_history/.history_files"
 
 # Define the path to the AppleScript file, dirname is used to get the script's directory
 APPLESCRIPT_FILE="$(dirname "$0")/create_history_ui.applescript"
@@ -32,7 +32,7 @@ MAX_HISTORY=20
 
 # Create necessary directory if it doesn't exist
 # -p flag: Create intermediate directories as required.  If this option is not specified, the full path prefix of each operand must already exist.  On the other hand, with this option specified, no error will be reported if a directory given as an operand already exists.  Intermediate directories are created with permission bits of “rwxrwxrwx” (0777) as modified by the current umask, plus write and search permission for the owner.
-mkdir -p "$HISTORY_FOLDER"
+mkdir -p "$CLIPBOARD_HISTORY_FOLDER"
 
 #######################################
 ############## Functions ##############
@@ -45,7 +45,7 @@ rotate_history() {
     
     # Check if content is different from the most recent entry
     # [ -f FILE ]	True if FILE exists and is a regular file.
-    if [[ -f "${HISTORY_FOLDER}/1" ]] && [[ "$(cat "${HISTORY_FOLDER}/1")" == "$new_content" ]]; then
+    if [[ -f "${CLIPBOARD_HISTORY_FOLDER}/1" ]] && [[ "$(cat "${CLIPBOARD_HISTORY_FOLDER}/1")" == "$new_content" ]]; then
         return
     fi
     
@@ -56,16 +56,16 @@ rotate_history() {
         prev=$((i-1))
 
         # Check if the file exists
-        if [[ -f "${HISTORY_FOLDER}/${prev}" ]]; then
+        if [[ -f "${CLIPBOARD_HISTORY_FOLDER}/${prev}" ]]; then
             # Move the file to the new index
             # Check how to use mv with "man mv" command in the terminal
-            mv "${HISTORY_FOLDER}/${prev}" "${HISTORY_FOLDER}/${i}"
+            mv "${CLIPBOARD_HISTORY_FOLDER}/${prev}" "${CLIPBOARD_HISTORY_FOLDER}/${i}"
         fi
     done
     
     # Save new content to file 1
     # echo prints the content to stdout, and the > operator redirects the output to a file
-    echo "$new_content" > "${HISTORY_FOLDER}/1"
+    echo "$new_content" > "${CLIPBOARD_HISTORY_FOLDER}/1"
 }
 
 # Function to start the clipboard listener
@@ -127,10 +127,10 @@ clear_history() {
     # The rm utility attempts to remove the non-directory type files specified on the command line.
     # -r flag: Remove the contents of directories recursively.
     # -f flag: Attempt to remove the files without prompting for confirmation, regardless of the file's permissions.
-    rm -rf "$HISTORY_FOLDER"
+    rm -rf "$CLIPBOARD_HISTORY_FOLDER"
 
     # Recreate the history folder
-    mkdir -p "$HISTORY_FOLDER"
+    mkdir -p "$CLIPBOARD_HISTORY_FOLDER"
 
     # If run in terminal mode, print a message that history is cleared
     echo "Clipboard history cleared."
@@ -148,9 +148,9 @@ show_history() {
     # Build the array of items
     for ((i=1; i<=MAX_HISTORY; i++)); do
         # Check if file exists
-        if [[ -f "${HISTORY_FOLDER}/${i}" ]]; then
+        if [[ -f "${CLIPBOARD_HISTORY_FOLDER}/${i}" ]]; then
             # Read the file content
-            content=$(cat "${HISTORY_FOLDER}/${i}")
+            content=$(cat "${CLIPBOARD_HISTORY_FOLDER}/${i}")
 
             # Truncate content for display and escape quotes
             preview="${content:0:100}"
@@ -185,9 +185,9 @@ show_history() {
         # Find the selected item and copy it to clipboard
         for ((i=1; i<=MAX_HISTORY; i++)); do
             # Check if file exists and if the preview matches the selection
-            if [[ -f "${HISTORY_FOLDER}/${i}" ]]; then
+            if [[ -f "${CLIPBOARD_HISTORY_FOLDER}/${i}" ]]; then
                 # Read the file content
-                content=$(cat "${HISTORY_FOLDER}/${i}")
+                content=$(cat "${CLIPBOARD_HISTORY_FOLDER}/${i}")
 
                 # Truncate content for display
                 preview="${content:0:100}"
