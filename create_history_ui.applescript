@@ -1,3 +1,7 @@
+# FILENAME: create_history_ui.applescript
+# AUTHOR: Lorinczi Matyas
+# DESCRIPTION: This script creates a UI for the clipboard history
+# USAGE: osascript create_history_ui.applescript "item1" "item2" "item3" "item4" "item5" ...
 on run argv
     tell application "System Events"
         activate
