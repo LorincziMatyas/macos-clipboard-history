@@ -1,4 +1,6 @@
 #!/bin/bash
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 # FILENAME: clipboard_history.sh
 # AUTHOR: Lorinczi Matyas
 # DESCRIPTION: A simple clipboard history tool for macOS using shell scripts and AppleScript.
@@ -38,34 +40,29 @@ mkdir -p "$CLIPBOARD_HISTORY_FOLDER"
 ############## Functions ##############
 #######################################
 
-# Function to rotate history files
+# Function to rotate history files with UTF-8 support
 rotate_history() {
     # Get the new content from the first argument
     local new_content="$1"
     
     # Check if content is different from the most recent entry
-    # [ -f FILE ]	True if FILE exists and is a regular file.
-    if [[ -f "${CLIPBOARD_HISTORY_FOLDER}/1" ]] && [[ "$(cat "${CLIPBOARD_HISTORY_FOLDER}/1")" == "$new_content" ]]; then
-        return
+    if [[ -f "${CLIPBOARD_HISTORY_FOLDER}/1" ]]; then
+        local old_content=$(LC_ALL=en_US.UTF-8 cat "${CLIPBOARD_HISTORY_FOLDER}/1")
+        if [[ "$old_content" == "$new_content" ]]; then
+            return
+        fi
     fi
     
     # Rotate files
     for ((i=MAX_HISTORY; i>1; i--)); do
-        # Move the file with index i-1 to i
-        # Prev stands for the previous index
         prev=$((i-1))
-
-        # Check if the file exists
         if [[ -f "${CLIPBOARD_HISTORY_FOLDER}/${prev}" ]]; then
-            # Move the file to the new index
-            # Check how to use mv with "man mv" command in the terminal
             mv "${CLIPBOARD_HISTORY_FOLDER}/${prev}" "${CLIPBOARD_HISTORY_FOLDER}/${i}"
         fi
     done
     
-    # Save new content to file 1
-    # echo prints the content to stdout, and the > operator redirects the output to a file
-    echo "$new_content" > "${CLIPBOARD_HISTORY_FOLDER}/1"
+    # Save new content to file 1 with UTF-8 encoding
+    LC_ALL=en_US.UTF-8 echo "$new_content" > "${CLIPBOARD_HISTORY_FOLDER}/1"
 }
 
 # Function to start the clipboard listener
@@ -149,13 +146,11 @@ show_history() {
     for ((i=1; i<=MAX_HISTORY; i++)); do
         # Check if file exists
         if [[ -f "${CLIPBOARD_HISTORY_FOLDER}/${i}" ]]; then
-            # Read the file content
-            content=$(cat "${CLIPBOARD_HISTORY_FOLDER}/${i}")
+            # Read the file content with UTF-8 handling
+            content=$(LC_ALL=en_US.UTF-8 cat "${CLIPBOARD_HISTORY_FOLDER}/${i}")
 
             # Truncate content for display and escape quotes
             preview="${content:0:100}"
-
-            # Escape double quotes for AppleScript
             preview="${preview//\"/\\\"}"
 
             # Truncate content for display
